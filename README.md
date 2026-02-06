@@ -42,3 +42,6 @@ The final model was selected based on performance metrics such as **R² Score** 
 ```bash
 pip install -r requirements.txt
 streamlit run app.py
+
+Note: Trained model files are excluded from GitHub due to size limits.  
+Run the training notebook to generate `best_model.pkl` locally before running the Streamlit app.
