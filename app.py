@@ -2,20 +2,23 @@ import streamlit as st
 import pickle
 import numpy as np
 
-# Load trained model
+# Load model and feature metadata
 model = pickle.load(open("models/best_model.pkl", "rb"))
+feature_columns = pickle.load(open("models/feature_columns.pkl", "rb"))
 
-st.title("🌫️ AQI Prediction App")
+st.set_page_config(page_title="AQI Prediction", layout="centered")
 
+st.title("🌫️ Air Quality Index (AQI) Prediction")
 st.write("Enter environmental parameters to predict AQI")
 
-so2 = st.number_input("SO2")
-no2 = st.number_input("NO2")
-rspm = st.number_input("RSPM")
-month = st.number_input("Month", min_value=1, max_value=12)
-year = st.number_input("Year", min_value=1990, max_value=2030)
+# Collect inputs dynamically
+user_inputs = []
+
+for feature in feature_columns:
+    value = st.number_input(f"{feature}", value=0.0)
+    user_inputs.append(value)
 
 if st.button("Predict AQI"):
-    features = np.array([[so2, no2, rspm, month, year]])
-    prediction = model.predict(features)
-    st.success(f"Predicted AQI: {prediction[0]:.2f}")
+    input_array = np.array([user_inputs])
+    prediction = model.predict(input_array)
+    st.success(f"✅ Predicted AQI: {prediction[0]:.2f}")
